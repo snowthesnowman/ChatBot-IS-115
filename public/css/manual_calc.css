@@ -1,0 +1,30 @@
+/* manual calculator */
+.calc { 
+    max-width: 360px; 
+    margin: 0 auto; 
+}
+
+.display { 
+    font-size:1.4rem; 
+    padding:10px; 
+    border:1px solid #ccc; 
+    background:#fff; 
+    width:100%; 
+    box-sizing:border-box; 
+}
+.keys { 
+    display:grid; 
+    grid-template-columns: repeat(4,1fr); 
+    gap:8px; 
+    margin-top:8px; 
+}
+.keys button { 
+    padding:12px; 
+    font-size:1.1rem; 
+}
+.result { 
+    margin-top:12px; 
+    background:#eef; 
+    padding:8px; 
+    border-radius:6px; 
+}

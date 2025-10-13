@@ -1,0 +1,82 @@
+/* Professional pink theme (bubblegum accents + white) for IS-115 */
+:root{
+  --pink-50:#fff5f9;
+  --pink-200:#ffd2e3;
+  --pink-400:#ff93bf;
+  --pink-500:#ff6fae;   /* bubblegum */
+  --pink-600:#e55e9a;
+
+  --white:#ffffff;
+  --gray-900:#0f172a;
+  --gray-700:#334155;
+  --gray-500:#64748b;
+  --gray-200:#e5e7eb;
+
+  --radius:14px;
+  --shadow-sm:0 4px 14px rgba(15,23,42,.06);
+}
+
+*{box-sizing:border-box}
+body.welcome{
+  margin:0;
+  font-family:Segoe UI,system-ui,-apple-system,Arial,sans-serif;
+  color:var(--gray-900);
+  background:var(--white);
+  line-height:1.6;
+}
+
+/* Header */
+.header{
+  background:var(--white);
+  border-bottom:1px solid var(--pink-200);
+  position:sticky;top:0;z-index:10;
+  box-shadow:var(--shadow-sm);
+}
+.header .wrap{
+  max-width:1100px;margin:0 auto;padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.brand{font-weight:800;letter-spacing:.4px}
+.nav a{
+  color:var(--gray-700);text-decoration:none;margin-left:16px;font-weight:600;
+}
+.nav a:hover{color:var(--pink-600);text-decoration:underline}
+
+/* Hero */
+.hero{
+  max-width:1100px;margin:28px auto 10px;padding:0 20px 8px;
+  display:grid;grid-template-columns:1fr;gap:16px;align-items:center;
+}
+.title{font-size:36px;line-height:1.2;margin:6px 0 8px}
+.lead{color:var(--gray-700);margin:0 0 10px}
+
+/* Buttons */
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.btn{
+  display:inline-block;padding:10px 16px;border-radius:12px;border:2px solid transparent;
+  font-weight:700;text-decoration:none;cursor:pointer;transition:.18s ease;
+}
+.btn-primary{background:var(--pink-500);color:#fff;box-shadow:var(--shadow-sm)}
+.btn-primary:hover{background:var(--pink-600);transform:translateY(-1px)}
+.btn-ghost{background:#fff;color:var(--pink-600);border-color:var(--pink-200)}
+.btn-ghost:hover{background:var(--pink-50)}
+
+/* Content */
+.main{max-width:1100px;margin:0 auto;padding:6px 20px 36px}
+.section{
+  background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);
+  padding:18px;box-shadow:var(--shadow-sm);margin:14px 0;
+}
+.section h2{
+  margin:0 0 8px;font-size:22px;
+  padding-bottom:6px;
+  background:linear-gradient(90deg,var(--pink-50),transparent) left bottom/100% 6px no-repeat;
+  border-bottom:2px solid var(--pink-200);
+}
+.section p{margin:6px 0 8px;color:var(--gray-700)}
+
+/* Footer */
+.footer{
+  text-align:center;color:var(--gray-500);padding:16px 0;margin-top:12px;
+  border-top:1px solid var(--pink-200);
+}
