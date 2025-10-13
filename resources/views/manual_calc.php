@@ -76,7 +76,7 @@ $display_value = htmlspecialchars($expr, ENT_QUOTES, 'UTF-8');
 $result_html = '';
 
 if ($result !== null) { //Basic Escape
-$result_html = '<div class="result"><strong>Resultat:</strong><div>' . htmlspecialchars((string)$result, ENT_QUOTES, encoding: encoding: 'UTF-8') . '</div></div>';
+$result_html = '<div class="result"><strong>Resultat:</strong><div>' . htmlspecialchars((string)$result, ENT_QUOTES, 'UTF-8') . '</div></div>';
 }
 
 // Bygg HTML for feilmelding hvis det finnes
