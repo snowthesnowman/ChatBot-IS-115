@@ -1,4 +1,5 @@
 Disclaimer: Sjekk at du har oppdatert php til tidligst versjon 8.2, noen av dependencies funker ikke uten.
+Pass også på at du har 7zip lastet ned, composer install fungerer ikke uten.
 
 1. Last ned https://getcomposer.org/download/ (Jeg brukte installer bare)
 2. composer global require "laravel/installer=~1.1"
