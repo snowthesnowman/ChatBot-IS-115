@@ -32,4 +32,5 @@ php artisan migrate
 
 7. 
 php artisan config:clear
+
 php artisan cache:clear
