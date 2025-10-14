@@ -7,17 +7,19 @@ fileinfo
 sqlite
 sqlite3
 
-derreter lagrer du
+DERETTER LAGRER DU!
 
 4. php -m (Sjekk om de er her, De burde være der har du gjort det riktig php.ini fil)
 
-5. (Bare copy paste alt)
+5. (Bare copy paste)
+
 php -v
 php -m | Select-String -Pattern "fileinfo|sqlite|pdo_sqlite"
 composer install
 Test-Path vendor/autoload.php 
 
 6. Lager database fil
+
 if (!(Test-Path database\database.sqlite)) { New-Item -ItemType File database\database.sqlite | Out-Null }
 php artisan migrate
 
