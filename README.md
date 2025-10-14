@@ -17,8 +17,11 @@ DERETTER LAGRER DU!
 5. (Bare copy paste, i vscode terminalen)
 
 php -v
+
 php -m | Select-String -Pattern "fileinfo|sqlite|pdo_sqlite"
+
 composer install
+
 Test-Path vendor/autoload.php 
 
 6. Lager database fil (paste i vscode terminal)
