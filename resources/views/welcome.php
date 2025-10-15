@@ -22,7 +22,7 @@
         <h1 class="title">Velkommen til vårt IS-115 PHP prosjekt</h1>
         <p class="lead">Et lite, ryddig oppsett med en manuell kalkulator og en enkel chatbot som er laget i PHP.</p>
         <div class="cta">
-         <a class="btn btn-primary" href="">Chat med boten</a>
+         <a class="btn btn-primary" href="/chatbot">Chat med boten</a>
          <a class="btn btn-ghost" href="/manual_calc.php">Prøv kalkulator</a>
         </div>
       </div>

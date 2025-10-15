@@ -1,5 +1,9 @@
 1. Last ned https://getcomposer.org/download/ (Jeg brukte installer bare)
-2. composer global require "laravel/installer=~1.1"
+2. 
+
+composer global require "laravel/installer=~1.1"
+composer require botman/botman
+composer require botman/driver-web
 
 3. Gjør php --ini i terminalen også gå innpå den filen og ta vekk ; fra
 

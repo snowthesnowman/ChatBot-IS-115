@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Uttrykket inneholder ugyldige tegn';
     }
 
-    // 4. Hvis alt er OK, prøv å evaluere uttrykket
+    // 4. Hvis alt er OK, prøv å regn ut mattestykket
     else {
 
         // Bytt ut ^ med ** for potens (PHP eval bruker **)
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
 
             // Forsøk å evaluere uttrykket
-            eval($evalCode);
+            eval($evalCode); // <-- DENNE LINJEN GJØR MATTEN
             if (isset($_r)) {
                 $result = $_r; // Resultat lagres
                 unset($_r);
@@ -160,6 +160,9 @@ echo <<<HTML
     </main>
     <footer class="footer"> © IS-115 PHP Prosjekt</footer>
     <script src="/js/manual_calc.js"></script>
+    <!-- Chatbot-->
+    <script src="https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js"></script>
+
 </body>
 </html>
 HTML;
