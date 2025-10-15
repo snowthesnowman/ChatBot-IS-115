@@ -5,7 +5,9 @@ Pass også på at du har 7zip lastet ned, composer install fungerer ikke uten.
 2. 
 
 composer global require "laravel/installer=~1.1"
+
 composer require botman/botman
+
 composer require botman/driver-web
 
 3. Gjør php --ini i terminalen også gå innpå den filen og ta vekk ; fra
