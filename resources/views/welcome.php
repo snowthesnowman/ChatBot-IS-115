@@ -73,3 +73,5 @@
     </footer>
   </body>
 </html>
+
+<script id="chatbotkit-widget" src="https://static.chatbotkit.com/integrations/widget/v2.js" data-widget="cmim2a2ildgsbzye8yuuyah7b"></script>
