@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $passordValidering = validerPassord($password);
     $tlfValidering = validerMobilnummer($phone);
 
-    if (!$epostValidering['valid']) {
+    if (!$epostValidering['valid']) { //Går gjennom alle validations og sjekker om noen feiler
         $error = $epostValidering['error'];
     } elseif (!$passordValidering['valid']) {
         $error = $passordValidering['error'];
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } elseif (strlen($username) < 3) {
         $error = "Brukernavn må være minst 3 tegn";
     } else {
-        // All validation passed - insert into DB
+        // Dersom alle valideringer er ok, fortsett med registrering og hash passord
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         $sql = "INSERT INTO users (username, email, password, phone)
@@ -89,21 +89,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt = $connect->prepare($sql);
         $stmt->bind_param("ssss", $username, $email, $hashed_password, $phone);
 
-        if ($stmt->execute()) {
-            $success = "Konto opprettet! Du kan nå logge inn.";
-        } else {
-            // Check for duplicate username/email
-            if (strpos($stmt->error, 'Duplicate') !== false) {
+        try {
+            if ($stmt->execute()) {
+                $success = "Konto opprettet! Du kan nå logge inn.";
+            }
+        } catch (mysqli_sql_exception $e) {
+            // Sjekker for duplicate i databasen (1062)
+            if ($e->getCode() == 1062) {
                 $error = "Brukernavn eller e-post finnes allerede";
             } else {
-                $error = "Feil ved registrering: " . $stmt->error;
+                $error = "Feil ved registrering: " . $e->getMessage();
             }
         }
 
         $stmt->close();
+        $connect->close();
     }
-    
-    $connect->close();
 }
 ?>
 <!DOCTYPE html>
@@ -135,22 +136,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="success-message"><?php echo htmlspecialchars($success); ?></div>
         <?php endif; ?>
         
-        <?php if ($error): ?>
+         <?php if ($error): ?>
             <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
         <form action="registrering.php" method="POST">
             <label>Brukernavn (minst 3 tegn):</label>
-            <input type="text" name="username" required minlength="3">
+            <input type="text" name="username" required>
 
             <label>E-post:</label>
             <input type="email" name="email" required>
 
             <label>Passord (minst 9 tegn, 1 stor bokstav, 2 tall, 1 spesialtegn):</label>
-            <input type="password" name="password" required minlength="9">
+            <input type="password" name="password" required>
 
             <label>Telefonnummer (8 siffer, start med 4 eller 9):</label>
-            <input type="text" name="phone" required pattern="[49][0-9]{7}" placeholder="4XXXXXXX eller 9XXXXXXX">
+            <input type="text" name="phone" required placeholder="4XXXXXXX eller 9XXXXXXX">
 
             <button type="submit">Registrer</button>
         </form>

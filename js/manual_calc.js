@@ -1,3 +1,4 @@
+// @Author: Mathias
 
 (function(){
   // Hent referanser til display-feltet (synlig) og hidden-feltet (sendes til server)

@@ -7,7 +7,17 @@ $expr = ''; //Hva brukeren skrev inn
 $isLoggedIn = $_SESSION['logged_in'] ?? false;
 $username = $_SESSION['username'] ?? 'Guest';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Initialiser historikk array hvis det ikke finnes
+if ($isLoggedIn && !isset($_SESSION['calc_history'])) {
+    $_SESSION['calc_history'] = [];
+}
+
+// Håndter "tøm historikk" knapp
+if ($isLoggedIn && isset($_POST['clear_history'])) {
+    $_SESSION['calc_history'] = [];
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['clear_history'])) {
 
     // Hent inn input fra skjemaet og fjern whitespace i start/slutt
     $expr = $_POST['expr'] ?? '';
@@ -26,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Uttrykk for langt';
     }
 
-    // 3. Kun tillatte tegn (tall, operatorer, parenteser, punktum, mellomrom)
+    // 3. Kun tillatte tegn
     elseif (!preg_match('#^[0-9+\-*/^().\s]+$#', $expr)) {
         $error = 'Uttrykket inneholder ugyldige tegn';
     }
@@ -35,11 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     else {
 
         // Bytt ut ^ med ** for potens (PHP eval bruker **)
-        $calc = str_replace('^', '**', $expr);
+        $calculate = str_replace('^', '**', $expr);
 
         // Evaluer uttrykket i et try/catch-blokk for å fange feil
-        $evalCode = '$_r = ' . $calc . ';';
-        set_error_handler(function($errno, $errstr) {
+        $evalCode = '$r = ' . $calculate . ';';
+        set_error_handler(function($errstr) {
 
             // Kaster en Exception slik at try/catch fanger PHP-feil under eval
             throw new Exception($errstr);
@@ -47,15 +57,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
 
             eval($evalCode); // <-- DENNE LINJEN GJØR MATTEN
-            if (isset($_r)) {
-                $result = $_r; // Resultat lagres
-                unset($_r);
+            if (isset($r)) {
+                $result = $r; // Resultat lagres
+                
+                // Lagre i historikk hvis innlogget
+                if ($isLoggedIn) {
+                    $_SESSION['calc_history'][] = [
+                        'expression' => $expr,
+                        'result' => $result,
+                        'timestamp' => date('H:i:s')
+                    ];
+                    
+                    // Behold kun de siste 10 beregningene
+                    if (count($_SESSION['calc_history']) > 10) {
+                        array_shift($_SESSION['calc_history']);
+                    }
+                }
+                
+                unset($r); // Fjerner resultatet etter bruk
             } 
             else 
             {
                 $error = 'Eval feilet'; 
             }
-
         } 
 
         catch (Throwable $e) { // $e fanger alle feil 
@@ -68,13 +92,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Escape uttrykket for sikker visning i HTML
+// Escape uttrykket for sikkerhetsgrunner te visning i HTML
 $display_value = htmlspecialchars($expr, ENT_QUOTES, 'UTF-8');
 
-// Bygg HTML for resultatet hvis vi har et resultat
+// Bygg HTML for resultatet
 $result_html = '';
 
-if ($result !== null) { //Basic Escape
+if ($result !== null) { //Basic Escape, hjelper mot XSS og lignende
 $result_html = '<div class="result"><strong>Resultat:</strong><div>' . htmlspecialchars((string)$result, ENT_QUOTES, 'UTF-8') . '</div></div>';
 }
 
@@ -170,11 +194,29 @@ if ($error !== null) {
                         <li>✓ Svare på spørsmål om kalkulatoren</li>
                         <li>✓ Hjelpe med komplekse utregninger</li>
                     </ul>
-                    <p style="margin-top:16px;font-size:14px;color:#4b5563;">
+                    <p>
                         Klikk på chatbot-ikonet nederst til høyre for å starte en samtale! <br>
                         (Kun tilgjengelig for innloggede brukere.)
                     </p>
                 </div>
+                
+                <?php if ($isLoggedIn && !empty($_SESSION['calc_history'])): ?>
+                    <div class="info-card history-card">
+                        <div class="history-header">
+                            <h3>Historikk</h3>
+                            <form method="post" action="manual_calc.php">
+                                <button type="submit" name="clear_history" class="history-clear-btn">Tøm</button>
+                            </form>
+                        </div>
+                        <?php foreach (array_reverse($_SESSION['calc_history']) as $item): ?>
+                            <div class="history-item">
+                                <span class="history-time"><?php echo htmlspecialchars($item['timestamp']); ?></span><br>
+                                <strong class="history-expression"><?php echo htmlspecialchars($item['expression']); ?></strong> = 
+                                <span class="history-result"><?php echo htmlspecialchars($item['result']); ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             </aside>
 
         </div>
